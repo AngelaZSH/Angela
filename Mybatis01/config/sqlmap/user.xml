@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名空间，作用就是对SQL进行分类化管理，理解SQL隔离 -->
+<mapper namespace="test">
+<!-- 
+	通过select执行数据库查询，将SQL语句封装到mappedStatement对象中
+	parameterType：指定输入参数类型
+	resultType:指定SQL输出结果的所映射的java对象类型，select指定resultType表示将单挑记录映射成java对象。
+ 	resultType指定的就是单条记录所映射的java对象类型
+ -->
+ 
+	<select id="id" parameterType="int" resultType="gz.ht.pojo.User">
+		select * from user where id = #{id}
+	</select>
+	
+	<select id = "username" parameterType="String" resultType="gz.ht.pojo.User">
+		<!-- 
+			${}:表示拼接SQL串，将接收到参数的内容不加任何修饰拼接在SQL中。不建议使用
+		 -->
+		select * from user where username like #{value}
+	</select>
+	
+	<insert id = "user" parameterType = "gz.ht.pojo.User">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer" >
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into user (username,birthday,sex,address) value(#{username},#{birthday},#{sex},#{address})
+	</insert>
+	
+	<delete id="userid" parameterType="int">
+		delete from user where id = #{value} 
+	</delete>
+	
+	<update id="update" parameterType="gz.ht.pojo.User">
+		update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id=#{id};
+	</update>
+	
+	
+</mapper>
